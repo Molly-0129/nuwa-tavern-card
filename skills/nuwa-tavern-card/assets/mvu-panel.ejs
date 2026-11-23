@@ -1,0 +1,26 @@
+<%
+if (runType === 'render') {
+  const variables = window.TavernHelper?.getVariables?.({type: 'message', message_id}) ?? {};
+  const story = variables.stat_data?.剧情 ?? {};
+  const isValueWithDescription = value =>
+    Array.isArray(value) && value.length === 2 && typeof value[1] === 'string';
+  const asText = value => {
+    const leaf = isValueWithDescription(value) ? value[0] : value;
+    if (leaf === true) return '是';
+    if (leaf === false) return '否';
+    return typeof leaf === 'number' || (typeof leaf === 'string' && leaf.trim())
+      ? String(leaf)
+      : '—';
+  };
+  const escapeHtml = text => text.replace(/[&<>"']/g, character =>
+    ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'})[character]);
+%>
+<details style="font:inherit;color:inherit;overflow-wrap:anywhere">
+  <summary style="cursor:pointer">剧情状态</summary>
+  <dl>
+    <dt>阶段</dt><dd><%- escapeHtml(asText(story.阶段)) %></dd>
+    <dt>线索数</dt><dd><%- escapeHtml(asText(story.线索数)) %></dd>
+    <dt>盟约生效</dt><dd><%- escapeHtml(asText(story.盟约生效)) %></dd>
+  </dl>
+</details>
+<% } %>
