@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto';
+import { describePatch, renderChanges } from './mvu-update-view.mjs';
 
 const updateBlock = /<(update(?:variable)?)>(?:(?!<\/?update(?:variable)?\s*>)[\s\S])*?<\/\1\s*>/gi;
 const partialUpdate = /<update(?:variable)?>(?:(?!<\/?update(?:variable)?\s*>)[\s\S])*(?![\s\S])/gi;
@@ -19,7 +20,7 @@ const patchEscapes = [
 const readyPatch = /<(update(?:variable)?)>(?:(?!<\/?update(?:variable)?\s*>)[\s\S])*?<JSONPatch>((?:[^<>&{\r\n]|&(?:amp|lt|gt|#123|#10);)*)<\/JSONPatch\s*>(?:(?!<\/?update(?:variable)?\s*>)[\s\S])*?<\/\1\s*>/gi;
 const box = 'margin:.6em 0;padding:.6em .85em;border:1px solid #59796b;border-radius:10px;background:#152420;color:#ecf3ee';
 const summary = 'cursor:pointer;color:#e2c683';
-const code = 'margin:.55em 0 0;white-space:pre-wrap;overflow-wrap:anywhere;font-size:.88em';
+const updateView = '\n\n```html\n<body>\n<style>body{margin:0;background:transparent;color:#e9f0eb;font:14px/1.6 system-ui,sans-serif}details{padding:12px 16px;border:1px solid #59796b;border-radius:12px;background:#152420}summary{cursor:pointer;color:#e2c683;font-weight:600}.change{display:flex;flex-wrap:wrap;justify-content:space-between;gap:6px 16px;padding:8px 0;border-top:1px solid #345044;overflow-wrap:anywhere}#changes{margin-top:10px}.up{color:#9ed9ba}.down{color:#f0b8b2}.neutral{color:#e9d9af}</style>\n<details><summary id="title">本轮变量变化</summary><div id="changes">正在读取更新记录…</div></details><textarea id="payload" hidden>$2</textarea>\n<script type="module">\n' + describePatch.toString() + '\n' + renderChanges.toString() + '\nrenderChanges(document);\n</script>\n</body>\n```\n\n';
 
 function rule(scriptName, pattern, replaceString, scope) {
   return {
@@ -48,9 +49,7 @@ export function buildMvuRegex({ panel = '', showProgress = true, decorateUpdates
       scripts.push(rule('[显示]变量更新转义 · ' + label, pattern, replacement, 'display'));
     }
     scripts.push(
-      rule('[显示]美化 JSON Patch 更新', readyPatch,
-        '\n\n<details style="' + box + '"><summary style="' + summary +
-        '">变量更新详情</summary><pre style="' + code + '"><code>$2</code></pre></details>\n\n', 'display'),
+      rule('[显示]美化 JSON Patch 更新', readyPatch, updateView, 'display'),
       rule('[显示]完整变量更新提示', updateBlock,
         '\n\n<div style="' + box + '">变量已更新</div>\n\n', 'display'),
     );
