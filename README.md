@@ -4,9 +4,23 @@
 
 ## 安装
 
+### 一键安装到 Claude Code 和 Antigravity
+
+电脑上有 Node.js 和 npm 时，在系统终端运行下面这一条命令即可同时安装到两个客户端。
+
+```sh
+npx skills@latest add Molly-0129/nuwa-tavern-card --skill nuwa-tavern-card -a claude-code antigravity -g -y
+```
+
+只装其中一个时，在 `-a` 后只保留 `claude-code` 或 `antigravity`。只想装到当前项目时，在项目目录运行并去掉 `-g`。安装后，在 Claude Code 或 Antigravity App 中输入 `/nuwa-tavern-card`。
+
+[Skills CLI 命令说明](https://github.com/vercel-labs/skills/blob/main/docs/commands.md) · [支持的客户端](https://github.com/vercel-labs/skills/blob/main/docs/agents.md)
+
+### 手动安装与 Codex 指令
+
 三个客户端共用仓库里的 `skills/nuwa-tavern-card` 文件夹。手动安装时，从仓库首页选择 **Code → Download ZIP** 并解压，复制整个技能文件夹，保留 `SKILL.md` 和所有子目录。下文的 `~` 指用户主目录，Windows 对应 `%USERPROFILE%`。
 
-### Codex
+#### Codex
 
 在 Codex 对话里发送下面这条指令。
 
@@ -18,7 +32,7 @@
 
 也可以手动复制到项目的 `.agents/skills/nuwa-tavern-card/`。
 
-### Google Antigravity（反重力）
+#### Google Antigravity（反重力）
 
 - 当前项目放到 `.agents/skills/nuwa-tavern-card/`。
 - 跨项目使用时放到 `~/.gemini/config/skills/nuwa-tavern-card/`。
@@ -26,7 +40,7 @@
 
 [Antigravity 技能文档](https://antigravity.google/docs/skills)
 
-### Claude Code（CC）
+#### Claude Code（CC）
 
 - 当前项目放到 `.claude/skills/nuwa-tavern-card/`。
 - 跨项目使用时放到 `~/.claude/skills/nuwa-tavern-card/`。
